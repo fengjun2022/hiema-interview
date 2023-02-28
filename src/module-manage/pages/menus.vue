@@ -83,6 +83,7 @@ export default {
         this.dataList = data.data
         this.listLoading = false
         var newArray = []
+     
         var icon = 'ivu-icon-document'
         var makeNewItem = function (layer, oldItem) {
           var icon
