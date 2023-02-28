@@ -2,7 +2,7 @@
   <div>
 
 <el-dialog
-  title="提示"
+  :title="title"
   :visible="isShow"
  :width="dialog_width"
   @close="cancel"
@@ -22,6 +22,11 @@ export default {
     isShow: {
       type: Boolean,
       required: true
+    },
+    // 标题
+    title: {
+      type: String,
+      default: '提示'
     },
     // 动态设置宽度
     dialog_width: {
