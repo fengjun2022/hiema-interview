@@ -13,6 +13,7 @@ import * as filters from './filters' // global filters
 import './mock' // simulation data
 // font-awesome
 import 'font-awesome/css/font-awesome.css'
+import Dialog from '@/components/Dialog/index.vue'
 /*
  * 注册 - 业务模块
  */
@@ -30,6 +31,8 @@ Vue.use(hmmm, store)
 /*
  * 注册 - 组件
  */
+
+Vue.component('Dialog', Dialog)
 
 // 饿了么
 Vue.use(Element, {
