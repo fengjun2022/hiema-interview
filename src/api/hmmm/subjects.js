@@ -6,3 +6,5 @@
  *
  * 学科有关的接口：自己写吧~~  已经被张老师删了 ^_^
  */
+import { createAPI } from '@/utils/request'
+export const getsubjects = data => createAPI('/subjects', 'get', data)
