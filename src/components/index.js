@@ -1,6 +1,6 @@
-import TableList from './TableList'
+import PkgTable from './PkgTable'
 export default {
   install (Vue) {
-    Vue.component('TableList', TableList)
+    Vue.component('PkgTable', PkgTable)
   }
 }
