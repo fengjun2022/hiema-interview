@@ -5,7 +5,8 @@
   <el-alert
     title="消息提示的文案"
     type="info"
-    show-icon>
+    show-icon
+    style="margin-bottom:20px">
   </el-alert>
   <el-table
     ref="filterTable"
@@ -13,47 +14,46 @@
     style="width: 100%">
 
     <el-table-column
-      prop="name"
+      prop="number"
       label="试题编号"
       width="180">
     </el-table-column>
         <el-table-column
-      prop="subjectID"
+      prop="subject"
       label="学科"
       width="180">
     </el-table-column>
         <el-table-column
-      prop="name"
+      prop="catalog"
       label="目录"
       width="180">
     </el-table-column>
-        <el-table-column
-      prop="name"
+      <el-table-column
+      prop="questionType"
       label="题型"
       width="180">
     </el-table-column>
         <el-table-column
-      prop="name"
+      prop="question"
       label="题干"
       width="220">
     </el-table-column>
         <el-table-column
-      prop="name"
+      prop="addDate"
       label="录入时间"
       width="180">
     </el-table-column>
         <el-table-column
-      prop="name"
+      prop="difficulty"
       label="难度"
       width="180">
     </el-table-column>
         <el-table-column
-      prop="name"
+      prop="creator"
       label="录入人"
       width="180">
     </el-table-column>
         <el-table-column
-      prop="name"
       label="操作"
       width="200">
         <template>
@@ -64,6 +64,17 @@
       </template>
     </el-table-column>
   </el-table>
+      <el-pagination
+      align="right"
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="page.page"
+      :page-sizes="[5, 10, 20, 50]"
+      :page-size="page.pagesize"
+      layout=" sizes, prev, pager, next, jumper"
+      :total="200">
+    </el-pagination>
 </div>
 
   </div>
@@ -71,6 +82,7 @@
 
 <script>
 import searchComp from '@/components/searchComp'
+import { getBaseInfo } from '@/api/hmmm/questions'
 export default {
   components: {
     searchComp
@@ -78,14 +90,30 @@ export default {
   data () {
     return {
       tableData: [{
-        subjectID: '123456',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        tag: '家'
+        // addDate: '',
+        // answer: '',
+        // catalogId: ' ',
+        // catalog: '',
+        // city: '',
+        // creator: '',
+        // creatorID: '',
+        // difficulty:'',
+        // direction:'',
+        // enterprise:'',
+        // enterpriseID:'',
+        // id:'',
+        // number:'',
       }],
+      page: {
+        page: 1,
+        pagesize: 5
+      },
       form: {
       }
     }
+  },
+  created () {
+    this.getBaseInfo()
   },
   methods: {
     resetDateFilter () {
@@ -106,6 +134,13 @@ export default {
     },
     onSubmit () {
       console.log('submit!')
+    },
+    handleSizeChange () {},
+    handleCurrentChange () {},
+    async getBaseInfo () {
+      const res = await getBaseInfo(this.page)
+      const { items } = res.data
+      this.tableData = items
     }
   }
 }
