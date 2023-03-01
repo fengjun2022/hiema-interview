@@ -1,154 +1,106 @@
 <template>
-<div style="background-color:white">
-<searchComp></searchComp>
-<div class="table">
+  <div>
+  <searchComp></searchComp>
+  <div class="table">
   <el-alert
-    title="消息提示的文案"
+    :title="`总共${total}条数据`"
     type="info"
     show-icon
     style="margin-bottom:20px">
   </el-alert>
-  <el-table
-    ref="filterTable"
-    :data="tableData"
-    style="width: 100%">
-
-    <el-table-column
-      prop="number"
-      label="试题编号"
-      width="180">
-    </el-table-column>
-        <el-table-column
-      prop="subject"
-      label="学科"
-      width="180">
-    </el-table-column>
-        <el-table-column
-      prop="catalog"
-      label="目录"
-      width="180">
-    </el-table-column>
-      <el-table-column
-      prop="questionType"
-      label="题型"
-      width="180">
-    </el-table-column>
-        <el-table-column
-      prop="question"
-      label="题干"
-      width="220">
-    </el-table-column>
-        <el-table-column
-      prop="addDate"
-      label="录入时间"
-      width="180">
-    </el-table-column>
-        <el-table-column
-      prop="difficulty"
-      label="难度"
-      width="180">
-    </el-table-column>
-        <el-table-column
-      prop="creator"
-      label="录入人"
-      width="180">
-    </el-table-column>
-        <el-table-column
-      label="操作"
-      width="200">
-        <template>
-        <el-button type="primary" icon="el-icon-view" circle title="预览"></el-button>
-        <el-button type="success" icon="el-icon-edit" circle title="编辑"></el-button>
-        <el-button type="danger" icon="el-icon-delete" circle title="删除"></el-button>
-        <el-button type="warning" icon="el-icon-check" circle title="加入精选"></el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-      <el-pagination
-      align="right"
-      background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="page.page"
-      :page-sizes="[5, 10, 20, 50]"
-      :page-size="page.pagesize"
-      layout=" sizes, prev, pager, next, jumper"
-      :total="200">
-    </el-pagination>
-</div>
-
+  <PkgTable :tableData='tableData' :paginationShow='paginationShow' :tableColumnOptions='tableColumnOptions' :pageInfo='pageInfo'>
+    <template #date='{data}'>
+      {{data.addDate | formatDate}}
+    </template>
+    <template #question='{data}'>
+      {{data.question | html2Text}}
+    </template>
+    <template #handle='{data}'>
+       <el-button type="primary" icon="el-icon-view" circle title="预览" @click="Preview(data)"></el-button>
+        <el-button type="success" icon="el-icon-edit" circle title="编辑" @click="$router.push({path:'new',query:{id:data.id}})"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle title="删除" @click="handleDelete(data.id)"></el-button>
+        <el-button type="warning" icon="el-icon-check" circle title="加入精选" @click="addChoiceState(data)"></el-button>
+    </template>
+  </PkgTable>
+  </div>
+  <Dialog :isShow.sync='isShow'></Dialog>
   </div>
 </template>
 
 <script>
 import searchComp from '@/components/searchComp'
-import { getBaseInfo } from '@/api/hmmm/questions'
+import { getBaseInfo, deleteBaseInfo, toggleChoiceState } from '@/api/hmmm/questions'
 export default {
   components: {
     searchComp
   },
   data () {
     return {
-      tableData: [{
-        // addDate: '',
-        // answer: '',
-        // catalogId: ' ',
-        // catalog: '',
-        // city: '',
-        // creator: '',
-        // creatorID: '',
-        // difficulty:'',
-        // direction:'',
-        // enterprise:'',
-        // enterpriseID:'',
-        // id:'',
-        // number:'',
-      }],
-      page: {
+      pageInfo: {
         page: 1,
-        pagesize: 5
+        pagesize: 5,
+        pages: 1
       },
-      form: {
-      }
+      tableData: [],
+      tableColumnOptions: [
+        { columnType: false, label: '试题编号', prop: 'number', width: '180' },
+        { columnType: false, label: '学科', prop: 'subject', width: '180' },
+        { columnType: false, label: '目录', prop: 'catalog', width: '180' },
+        { columnType: false, label: '题型', prop: 'questionType', width: '180' },
+        { columnType: true, label: '题干', prop: 'question', width: '220', slotName: 'question' },
+        { columnType: true, label: '录入时间', prop: 'addDate', width: '180', slotName: 'date' },
+        { columnType: false, label: '难度', prop: 'difficulty', width: '180' },
+        { columnType: false, label: '录入人', prop: 'creator', width: '180' },
+        { columnType: true, label: '操作', width: '200px', slotName: 'handle', position: 'right' }
+      ],
+      paginationShow: true,
+      total: '',
+      isShow: false
+
     }
   },
   created () {
     this.getBaseInfo()
   },
   methods: {
-    resetDateFilter () {
-      this.$refs.filterTable.clearFilter('date')
-    },
-    clearFilter () {
-      this.$refs.filterTable.clearFilter()
-    },
-    formatter (row, column) {
-      return row.address
-    },
-    filterTag (value, row) {
-      return row.tag === value
-    },
-    filterHandler (value, row, column) {
-      const property = column.property
-      return row[property] === value
-    },
-    onSubmit () {
-      console.log('submit!')
-    },
-    handleSizeChange () {},
-    handleCurrentChange () {},
     async getBaseInfo () {
       const res = await getBaseInfo(this.page)
       const { items } = res.data
+      this.total = res.data.counts
+      console.log(res, items)
       this.tableData = items
+    },
+    Preview (val) {
+      console.log(val)
+      this.isShow = true
+    },
+    async handleDelete (id) {
+      try {
+        await this.$confirm('请问确认删除吗')
+        await deleteBaseInfo(id)
+        this.$message.success('删除成功')
+        this.getBaseInfo()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async addChoiceState (data) {
+      try {
+        await this.$confirm('请问确认加入精选吗')
+        await toggleChoiceState({ id: data.id, choiceState: 1 })
+        this.$message.success('删除成功')
+        this.getBaseInfo()
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
 </script>
-<style scoped>
-  .table{
+
+<style>
+ .table{
     margin: 10px;
     background-color: white;
-    padding: 0 20px;
   }
 </style>
