@@ -11,9 +11,7 @@ import { createAPI } from '@/utils/request'
 
 export const list = data => createAPI('/companys', 'get', data)
 export const add = data => createAPI('/companys', 'post', data)
-export const update = data =>
-  createAPI(`/companys/${data.userId}`, 'get', data)
-export const remove = data => createAPI(`/companys/${data.id}`, 'get')
-export const detail = data =>
-  createAPI(`/companys/${data.userId}`, 'post', data)
-export const disabled = data => createAPI('/companys/state', 'post', data)
+export const update = data => createAPI(`/companys/${data.userId}`, 'get', data)
+export const remove = data => createAPI(`/companys/${data.id}`, 'delete')
+export const detail = data => createAPI(`/companys/${data.userId}`, 'post', data)
+export const disabled = data => createAPI(`/companys/${data.id}/${data.state}`, 'post', data)

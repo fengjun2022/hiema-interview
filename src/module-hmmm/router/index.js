@@ -36,25 +36,25 @@ export default [
     children: [
       {
         path: 'list',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/questions'),
         name: 'questions-list',
         meta: { title: '基础题库', noCache: true, icon: 'component' }
       },
       {
         path: 'choice',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/questions-choice'),
         name: 'questions-choice',
         meta: { title: '精选题库', noCache: true, icon: 'component' }
       },
       {
         path: 'new',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/questions-new'),
         name: 'questions-new',
         meta: { title: '试题录入', noCache: true, icon: 'component' }
       },
       {
         path: 'randoms',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/questions-randoms'),
         name: 'questions-randoms',
         meta: { title: '组题列表', noCache: true, icon: 'component' }
       }
@@ -72,19 +72,19 @@ export default [
     children: [
       {
         path: 'list',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/subjects'),
         name: 'subjects-list',
         meta: { title: '学科', noCache: true, icon: 'component' }
       },
       {
         path: 'directorys',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/directorys'),
         name: 'subjects-directorys',
         meta: { title: '目录', noCache: true, icon: 'component' }
       },
       {
         path: 'tags',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/tags'),
         name: 'subjects-tags',
         meta: { title: '标签', noCache: true, icon: 'component' }
       }
