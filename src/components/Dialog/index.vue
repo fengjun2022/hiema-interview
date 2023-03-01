@@ -9,8 +9,10 @@
   >
   <slot>请传入slot</slot>
   <span slot="footer" class="dialog-footer">
-    <el-button @click="cancel">取 消</el-button>
-    <el-button type="primary" @click="determine">确 定</el-button>
+    <el-button v-if="btn" type="primary" @click="cancel">关闭</el-button>
+    <el-button v-if="!btn"  @click="cancel">取 消</el-button>
+    <el-button v-if="!btn"  type="primary" @click="determine">确 定</el-button>
+
   </span>
 </el-dialog>
   </div>
@@ -33,7 +35,12 @@ export default {
       type: String,
       default: '30%'
     },
-    form: [Array, Object, String]
+    form: [Array, Object, String],
+    btn: {
+      type: Boolean,
+      default: false
+    }
+
   },
 
   data () {

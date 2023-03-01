@@ -54,7 +54,7 @@ export default [
       },
       {
         path: 'randoms',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/questions'),
         name: 'questions-randoms',
         meta: { title: '组题列表', noCache: true, icon: 'component' }
       }
