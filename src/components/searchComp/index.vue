@@ -1,82 +1,80 @@
 <template>
   <div class="main">
     <div class="header">
-     <div class="text">说明:当前支持学科和关键字条件筛选</div>
+      <div class="text">说明:当前支持学科和关键字条件筛选</div>
       <el-button style="float:right" type="success" icon="el-icon-edit" size="small" @click="$router.push('new')">新增试题</el-button>
     </div>
-  <el-form ref="form" :model="form" label-width="auto" :inline="true" class="demo-form-inline">
-  <el-form-item label="学科" prop="subjectID">
-    <el-select class="width" v-model="form.subjectID" placeholder="请选择活动区域">
-      <el-option :label="item.subjectName" :value="item.id" v-for="item in subjects" :key="item.id"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="二级目录" prop="catalogID">
-    <el-select class="width" v-model="form.catalogID" placeholder="请选择活动区域" >
-      <el-option :label="item.tagName" :value="item.subjectID" v-for="item in twoSubjects" :key="item.id"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="标签" prop="tags">
-    <el-select class="width" v-model="form.tags" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="关键字" prop="keyword">
-    <el-input class="width" v-model="form.keyword"></el-input>
-  </el-form-item>
-  <el-form-item label="试题类型" prop="questionType">
-    <el-select class="width" v-model="form.questionType" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="难度" prop="difficulty">
-    <el-select class="width" v-model="form.difficulty" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="方向" prop="direction">
-    <el-select class="width" v-model="form.direction" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="录入人" prop="creatorID">
-    <el-select class="width" v-model="form.creatorID" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="题目备注" prop="remarks">
-    <el-input class="width" v-model="form.remarks"></el-input>
-  </el-form-item>
-  <el-form-item label="企业简称" prop="shortName">
-    <el-input class="width" v-model="form.shortName"></el-input>
-  </el-form-item>
-   <el-form-item label="城市" prop="province">
-    <el-select style="width:160px" v-model="form.province" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-    </el-form-item>
-    <el-form-item prop="city">
-    <el-select style="width:160px " v-model="form.city" placeholder="请选择活动区域">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item style="float:right ; margin-right:28px">
-    <el-button size="small" @click="clearForm">清除</el-button>
-    <el-button type="primary" @click="onSubmit" size="small">搜索</el-button>
-  </el-form-item>
-</el-form>
+    <el-form ref="form" :model="form" label-width="auto" :inline="true" class="demo-form-inline">
+      <el-form-item label="学科" prop="subjectID">
+        <el-select v-model="form.subjectID" class="width" placeholder="请选择活动区域" @change="changeSubjectId">
+          <el-option v-for="item in subjects" :key="item.id" :label="item.subjectName" :value="item.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="二级目录" prop="catalogID">
+        <el-select v-model="form.catalogID" class="width" placeholder="请选择活动区域">
+          <el-option v-for="item in twoSubjects" :key="item.id" :label="item.tagName" :value="item.subjectID" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="标签" prop="tags">
+        <el-select v-model="form.tags" class="width" placeholder="请选择活动区域">
+          <el-option label="区域一" value="shanghai" />
+          <el-option label="区域二" value="beijing" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="关键字" prop="keyword">
+        <el-input v-model="form.keyword" class="width" />
+      </el-form-item>
+      <el-form-item label="试题类型" prop="questionType">
+        <el-select v-model="form.questionType" class="width" placeholder="请选择活动区域">
+          <el-option label="区域一" value="shanghai" />
+          <el-option label="区域二" value="beijing" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="难度" prop="difficulty">
+        <el-select v-model="form.difficulty" class="width" placeholder="请选择活动区域">
+          <el-option label="区域一" value="shanghai" />
+          <el-option label="区域二" value="beijing" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="方向" prop="direction">
+        <el-select v-model="form.direction" class="width" placeholder="请选择活动区域">
+          <el-option label="区域一" value="shanghai" />
+          <el-option label="区域二" value="beijing" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="录入人" prop="creatorID">
+        <el-select v-model="form.creatorID" class="width" placeholder="请选择活动区域">
+          <el-option label="区域一" value="shanghai" />
+          <el-option label="区域二" value="beijing" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="题目备注" prop="remarks">
+        <el-input v-model="form.remarks" class="width" />
+      </el-form-item>
+      <el-form-item label="企业简称" prop="shortName">
+        <el-input v-model="form.shortName" class="width" />
+      </el-form-item>
+      <el-form-item label="城市" prop="province">
+        <el-select v-model="form.province" style="width:160px" placeholder="请选择活动区域" @change="changeProvince">
+          <el-option v-for="province in provinces" :key="province" :label="province" :value="province" />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="city">
+        <el-select v-model="form.city" style="width:160px " placeholder="请选择活动区域">
+          <el-option v-for="city in citys" :key="city" :label="city" :value="city" />
+        </el-select>
+      </el-form-item>
+      <el-form-item style="float:right ; margin-right:28px">
+        <el-button size="small" @click="clearForm">清除</el-button>
+        <el-button type="primary" size="small" @click="onSubmit">搜索</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
 import { getSubjectsList, getTwoList } from '@/api/hmmm/subjects'
-import { getChoiceInfo } from '@/api/hmmm/questions'
+import { provinces, citys } from '@/api/hmmm/citys'
 export default {
   props: {
     flag: {
@@ -84,7 +82,7 @@ export default {
       required: true
     }
   },
-  data () {
+  data() {
     return {
       form: {
       },
@@ -95,38 +93,45 @@ export default {
       // 学科数据
       subjects: [],
       twoSubjects: [],
-      tableDate: []
+      tableDate: [],
+      provinces: [],
+      citys: []
     }
   },
-  created () {
+  created() {
     this.getSubjectsList()
+    const res = provinces()
+    this.provinces = res
   },
   methods: {
-    clearForm () {
+    clearForm() {
       this.$refs.form.resetFields()
     },
-    async onSubmit () {
+    async onSubmit() {
+      console.log(this.form)
       if (this.flag === 1) {
         await this.$parent.getBaseInfo(this.form)
       } else {
         this.$parent.getChoiceInfo(this.form)
       }
     },
-    async getSubjectsList () {
+    // 修改城市触发事件获取下级城市
+    changeProvince() {
+      console.log(this.form.province)
+      const res = citys(this.form.province)
+      this.citys = res
+    },
+    // 修改触发事件获取下级城市
+    async changeSubjectId() {
+      console.log(this.form.subjectID)
+      const res = await getTwoList({ ...this.page, subjectID: this.form.subjectID })
+      this.twoSubjects = res.data.items
+      console.log(this.twoSubjects)
+    },
+    async getSubjectsList() {
       const res = await getSubjectsList(this.page)
       this.subjects = res.data.items
     }
-  },
-  watch: {
-    'form.subjectID': {
-      async handler (newVal, oldVal) {
-        console.log(newVal, oldVal)
-        const res = await getTwoList({ ...this.page, subjectID: newVal })
-        this.twoSubjects = res.data.items
-        console.log(this.twoSubjects)
-      }
-    }
-
   }
 
 }

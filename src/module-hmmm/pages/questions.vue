@@ -1,29 +1,29 @@
 <template>
   <div>
-  <searchComp :flag='1'></searchComp>
-  <div class="table">
-  <el-alert
-    :title="`总共${total}条数据`"
-    type="info"
-    show-icon
-    style="margin-bottom:20px">
-  </el-alert>
-  <PkgTable :tableData='tableData' :paginationShow='paginationShow' :tableColumnOptions='tableColumnOptions' :pageInfo='pageInfo'>
-    <template #date='{data}'>
-      {{data.addDate | formatDate}}
-    </template>
-    <template #question='{data}'>
-      {{data.question | html2Text}}
-    </template>
-    <template #handle='{data}'>
-       <el-button type="primary" icon="el-icon-view" circle title="预览" @click="Preview(data)"></el-button>
-        <el-button type="success" icon="el-icon-edit" circle title="编辑" @click="$router.push({path:'new',query:{id:data.id}})"></el-button>
-        <el-button type="danger" icon="el-icon-delete" circle title="删除" @click="handleDelete(data.id)"></el-button>
-        <el-button type="warning" icon="el-icon-check" circle title="加入精选" @click="addChoiceState(data)"></el-button>
-    </template>
-  </PkgTable>
-  </div>
-  <Dialog :isShow.sync='isShow'></Dialog>
+    <searchComp :flag="1" />
+    <div class="table">
+      <el-alert
+        :title="`总共${pageInfo.counts}条数据`"
+        type="info"
+        show-icon
+        style="margin-bottom:20px"
+      />
+      <PkgTable :table-data="tableData" :pagination-show="paginationShow" :table-column-options="tableColumnOptions" :page-info="pageInfo">
+        <template #date="{data}">
+          {{ data.addDate | formatDate }}
+        </template>
+        <template #question="{data}">
+          {{ data.question | html2Text }}
+        </template>
+        <template #handle="{data}">
+          <el-button type="primary" icon="el-icon-view" circle title="预览" @click="Preview(data)" />
+          <el-button type="success" icon="el-icon-edit" circle title="编辑" @click="$router.push({path:'new',query:{id:data.id}})" />
+          <el-button type="danger" icon="el-icon-delete" circle title="删除" @click="handleDelete(data.id)" />
+          <el-button type="warning" icon="el-icon-check" circle title="加入精选" @click="addChoiceState(data)" />
+        </template>
+      </PkgTable>
+    </div>
+    <Dialog :is-show.sync="isShow" />
   </div>
 </template>
 
@@ -34,12 +34,12 @@ export default {
   components: {
     searchComp
   },
-  data () {
+  data() {
     return {
       pageInfo: {
         page: 1,
         pagesize: 5,
-        pages: 1
+        counts: 0
       },
       tableData: [],
       tableColumnOptions: [
@@ -54,27 +54,25 @@ export default {
         { columnType: true, label: '操作', width: '200px', slotName: 'handle', position: 'right' }
       ],
       paginationShow: true,
-      total: '',
       isShow: false
 
     }
   },
-  created () {
+  created() {
     this.getBaseInfo()
   },
   methods: {
-    async getBaseInfo (value) {
-      const res = await getBaseInfo({ ...this.page, ...value })
+    async getBaseInfo(value) {
+      const res = await getBaseInfo({ ...this.pageInfo, ...value })
       const { items } = res.data
-      this.total = res.data.counts
-      console.log(res, items)
+      this.pageInfo.counts = res.data.counts
       this.tableData = items
     },
-    Preview (val) {
+    Preview(val) {
       console.log(val)
       this.isShow = true
     },
-    async handleDelete (id) {
+    async handleDelete(id) {
       try {
         await this.$confirm('请问确认删除吗')
         await deleteBaseInfo(id)
@@ -84,7 +82,7 @@ export default {
         console.log(error)
       }
     },
-    async addChoiceState (data) {
+    async addChoiceState(data) {
       try {
         await this.$confirm('请问确认加入精选吗')
         await toggleChoiceState({ id: data.id, choiceState: 1 })

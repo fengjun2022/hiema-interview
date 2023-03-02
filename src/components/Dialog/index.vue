@@ -1,18 +1,18 @@
 <template>
   <div>
 
-<el-dialog
-  title="提示"
-  :visible="isShow"
- :width="dialog_width"
-  @close="cancel"
-  >
-  <slot>请传入slot</slot>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="cancel">取 消</el-button>
-    <el-button type="primary" @click="determine">确 定</el-button>
-  </span>
-</el-dialog>
+    <el-dialog
+      title="提示"
+      :visible="isShow"
+      :width="dialog_width"
+      @close="cancel"
+    >
+      <slot>请传入slot</slot>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="determine">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -31,23 +31,23 @@ export default {
     form: [Array, Object, String]
   },
 
-  data () {
+  data() {
     return {
 
     }
   },
-  mounted () {
-
-  },
   computed: {
 
   },
+  mounted() {
+
+  },
   methods: {
-    cancel () {
+    cancel() {
       this.$emit('update:isShow', false)
       this.$emit('update:form', this.resets(this.form))
     },
-    async determine () {
+    async determine() {
       try {
         await this.$confirm('您确定提交吗？')
         await this.$emit('submit')
@@ -56,7 +56,7 @@ export default {
       } catch (err) { return err }
     },
 
-    resets (data) {
+    resets(data) {
       if (!data) return
       if (data.constructor === Object) {
         Object.keys(data).forEach(item => { data[item] = '' })
