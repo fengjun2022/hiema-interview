@@ -72,19 +72,19 @@ export default [
     children: [
       {
         path: 'list',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/subjects'),
         name: 'subjects-list',
         meta: { title: '学科', noCache: true, icon: 'component' }
       },
       {
         path: 'directorys',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/directorys'),
         name: 'subjects-directorys',
         meta: { title: '目录', noCache: true, icon: 'component' }
       },
       {
         path: 'tags',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/tags'),
         name: 'subjects-tags',
         meta: { title: '标签', noCache: true, icon: 'component' }
       }
