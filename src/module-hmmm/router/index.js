@@ -48,13 +48,13 @@ export default [
       },
       {
         path: 'new',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/questions-new'),
         name: 'questions-new',
         meta: { title: '试题录入', noCache: true, icon: 'component' }
       },
       {
         path: 'randoms',
-        component: _import('hmmm/pages/companys'),
+        component: _import('hmmm/pages/questions'),
         name: 'questions-randoms',
         meta: { title: '组题列表', noCache: true, icon: 'component' }
       }
