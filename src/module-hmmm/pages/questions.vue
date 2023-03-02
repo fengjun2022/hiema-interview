@@ -1,6 +1,6 @@
 <template>
   <div>
-  <searchComp></searchComp>
+  <searchComp :flag='1'></searchComp>
   <div class="table">
   <el-alert
     :title="`总共${total}条数据`"
@@ -63,8 +63,8 @@ export default {
     this.getBaseInfo()
   },
   methods: {
-    async getBaseInfo () {
-      const res = await getBaseInfo(this.page)
+    async getBaseInfo (value) {
+      const res = await getBaseInfo({ ...this.page, ...value })
       const { items } = res.data
       this.total = res.data.counts
       console.log(res, items)

@@ -1,12 +1,12 @@
 <template>
 <div>
-  <searchComp></searchComp>
+  <searchComp :flag='2'></searchComp>
   <div class="table">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-    <el-tab-pane label="全部" name="first"></el-tab-pane>
-    <el-tab-pane label="待审核" name="second"></el-tab-pane>
-    <el-tab-pane label="已审核" name="third"></el-tab-pane>
-    <el-tab-pane label="已拒绝" name="fourth"></el-tab-pane>
+    <el-tab-pane label="全部" name="1"></el-tab-pane>
+    <el-tab-pane label="待审核" name="2"></el-tab-pane>
+    <el-tab-pane label="已审核" name="3"></el-tab-pane>
+    <el-tab-pane label="已拒绝" name="4"></el-tab-pane>
     </el-tabs>
     <el-alert
     title="消息提示的文案"
@@ -23,7 +23,7 @@
     </template>
     <template #handle='{data}'>
         <el-button @click="Preview(data)" type="text" size="small">预览</el-button>
-        <el-button @click="PreviewChk(data)" type="text" size="small">审核</el-button>
+        <el-button @click="PreviewChk(data)" type="text" size="small" :disabled='data.chkState===1'>审核</el-button>
         <el-button @click="$router.push({path:'new',query:{id:data.id}})" type="text" size="small" :disabled='data.publishState!==0'>修改</el-button>
         <el-button @click="handleShelf(data)" type="text" size="small" >{{data.publishState==0?'上架':'下架'}}</el-button>
         <el-button @click="handleDelete(data.id)" type="text" size="small" :disabled='data.publishState!==0'>删除</el-button>
@@ -78,9 +78,10 @@ export default {
     this.getChoiceInfo()
   },
   methods: {
-    async getChoiceInfo () {
-      const res = await getChoiceInfo(this.pageInfo)
+    async getChoiceInfo (data) {
+      const res = await getChoiceInfo({ ...this.pageInfo, ...data })
       this.tableData = res.data.items
+      console.log(this.tableData)
     },
     async handleDelete (id) {
       try {
@@ -100,8 +101,23 @@ export default {
       console.log(data)
       this.isShow1 = true
     },
-    handleClick (data) {
-
+    handleClick () {
+      switch (this.activeName) {
+        case '1':
+          this.getChoiceInfo()
+          break
+        case '2':
+          this.getChoiceInfo({ chkState: 0 })
+          break
+        case '3':
+          this.getChoiceInfo({ chkState: 1 })
+          break
+        case '4':
+          this.getChoiceInfo({ chkState: 2 })
+          break
+        default:
+          break
+      }
     },
     async handleShelf (data) {
       try {

@@ -7,7 +7,7 @@
  * 企业管理
  */
 
-import createAPI from '@/utils/request'
+import { createAPI } from '@/utils/request'
 
 export const list = data => createAPI('/comapnys', 'post')
 export const add = data => createAPI('/comapnys', 'post', data)

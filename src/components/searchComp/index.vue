@@ -5,13 +5,13 @@
       <el-button style="float:right" type="success" icon="el-icon-edit" size="small" @click="$router.push('new')">新增试题</el-button>
     </div>
   <el-form ref="form" :model="form" label-width="auto" :inline="true" class="demo-form-inline">
-  <el-form-item label="学科" prop="value">
-    <el-select class="width" v-model="form.value" placeholder="请选择活动区域">
+  <el-form-item label="学科" prop="subjectID">
+    <el-select class="width" v-model="form.subjectID" placeholder="请选择活动区域">
       <el-option :label="item.subjectName" :value="item.id" v-for="item in subjects" :key="item.id"></el-option>
     </el-select>
   </el-form-item>
-  <el-form-item label="二级目录" prop="subjectID">
-    <el-select class="width" v-model="form.subjectID" placeholder="请选择活动区域" >
+  <el-form-item label="二级目录" prop="catalogID">
+    <el-select class="width" v-model="form.catalogID" placeholder="请选择活动区域" >
       <el-option :label="item.tagName" :value="item.subjectID" v-for="item in twoSubjects" :key="item.id"></el-option>
     </el-select>
   </el-form-item>
@@ -76,7 +76,14 @@
 
 <script>
 import { getSubjectsList, getTwoList } from '@/api/hmmm/subjects'
+import { getChoiceInfo } from '@/api/hmmm/questions'
 export default {
+  props: {
+    flag: {
+      type: Number,
+      required: true
+    }
+  },
   data () {
     return {
       form: {
@@ -87,7 +94,8 @@ export default {
       },
       // 学科数据
       subjects: [],
-      twoSubjects: []
+      twoSubjects: [],
+      tableDate: []
     }
   },
   created () {
@@ -97,18 +105,21 @@ export default {
     clearForm () {
       this.$refs.form.resetFields()
     },
-    onSubmit () {
-      console.log(this.form)
+    async onSubmit () {
+      if (this.flag === 1) {
+        await this.$parent.getBaseInfo(this.form)
+      } else {
+        this.$parent.getChoiceInfo(this.form)
+      }
     },
     async getSubjectsList () {
       const res = await getSubjectsList(this.page)
       this.subjects = res.data.items
-      console.log()
     }
   },
   watch: {
-    'form.value': {
-      async  handler (newVal, oldVal) {
+    'form.subjectID': {
+      async handler (newVal, oldVal) {
         console.log(newVal, oldVal)
         const res = await getTwoList({ ...this.page, subjectID: newVal })
         this.twoSubjects = res.data.items
