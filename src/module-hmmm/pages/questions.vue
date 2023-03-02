@@ -2,7 +2,7 @@
   <div class='container'>题组管理
 <button @click="flag=!flag">点击弹窗</button>
 
-<Dialog :isShow.sync="flag" @submit="submit" :Formname="dynamicValidateForm">
+<Dialog :isShow.sync="flag" @submit="submit" :Formname="dynamicValidateForm" :refname="'njj'">
 
   <el-form-item
     prop="email"
@@ -57,7 +57,6 @@ export default {
     //       return false
     //     }
     //   })
-    // },
     resetForm (formName) {
       this.$refs[formName].resetFields()
     },
@@ -73,10 +72,14 @@ export default {
         key: Date.now()
       })
     },
-    submit (validate) {
-
+    // submit (s) {
+    //   console.log(s)
+    // }
+    submit (submit) {
+      submit(() => { return Promise.resolve() })
     }
   }
+
 }
 
 </script>
