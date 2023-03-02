@@ -16,3 +16,5 @@ export const getsubject = id => createAPI(`/subjects/${id}`, 'get')
 export const editsubjects = data => createAPI(`/subjects/${data.id}`, 'put', data)
 // 删除学科
 export const deletesubjects = id => createAPI(`/subjects/${id}`, 'delete')
+
+export const simpleSubject = data => createAPI('/subjects/simple', 'get', data)

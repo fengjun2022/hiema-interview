@@ -1,49 +1,49 @@
 <template>
   <div class="container">
     <el-card>
-      <!-- 面包屑区域 -->
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item>学科管理</el-breadcrumb-item>
-        <el-breadcrumb-item></el-breadcrumb-item>
-        <el-breadcrumb-item>目录管理</el-breadcrumb-item>
-      </el-breadcrumb>
-
       <!-- 搜索栏区域 -->
       <el-row>
         <el-col :span="18">
           <!-- 搜索框 -->
-          <el-col :span="11">
-            <el-form label-width="80px">
-              <el-form-item label="标签名称">
-                <el-input class="inputCol"></el-input>
-              </el-form-item>
-              <el-form-item label="状态">
-                <el-select placeholder="请选择">
-                  <el-option label="已启用" :value="1"> </el-option>
-                  <el-option label="已禁用" :value="0"> </el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-          </el-col>
-          <el-col :span="12" class="left-fot">
-            <el-button size="small" class="colInput" plain>清除</el-button>
-            <el-button size="small" class="colInput" type="primary"
-              >搜索</el-button
+          <el-form :inline="true" label-width="80px">
+            <el-form-item label="标签名称">
+              <el-input
+                v-model="inputList.directoryName"
+                class="inputCol"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="状态">
+              <el-select v-model="inputList.state" placeholder="请选择">
+                <el-option label="已启用" :value="1"> </el-option>
+                <el-option label="已禁用" :value="0"> </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-button size="small" class="colInput" plain @click="clearSub"
+                >清除</el-button
+              >
+              <el-button
+                size="small"
+                class="colInput"
+                type="primary"
+                @click="SearchIn"
+                >搜索</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-form>
+          <el-col :span="6">
+            <el-button
+              class="colright"
+              size="mini"
+              type="success"
+              icon="el-icon-edit"
+              @click="newBtn"
+              >新增标签</el-button
             >
           </el-col>
-        </el-col>
-        <el-col :span="6">
-          <el-button
-            class="colright"
-            size="mini"
-            type="success"
-            icon="el-icon-edit"
-            >新增标签</el-button
-          >
-          <el-button type="text" class="colright" icon="el-icon-back"
-            >返回学科</el-button
-          >
-        </el-col>
+        </el-form>
       </el-row>
 
       <!-- 消息文案 -->
@@ -56,113 +56,212 @@
       </el-alert>
 
       <!-- 表格区域 -->
-      <el-table style="width: 100%">
+      <el-table :data="directoryList" style="width: 100%">
         <el-table-column type="index" label="序号"> </el-table-column>
         <el-table-column prop="subjectName" label="所属学科"> </el-table-column>
         <el-table-column prop="tagName" label="目录名称"> </el-table-column>
         <el-table-column prop="username" label="创建者"> </el-table-column>
-        <el-table-column prop="addDate" label="创建日期"> </el-table-column>
+        <el-table-column prop="addDate" label="创建日期">
+          <template slot-scope="{ row }">
+            {{ row.addDate | parseTimeByString }}
+          </template>
+           </el-table-column>
         <el-table-column prop="state" label="状态">
-          <template slot-scope="scope">
+         <template slot-scope="scope">
             {{ scope.row.state === 1 ? "已启用" : "已禁用" }}
           </template>
         </el-table-column>
         <el-table-column prop="address" label="操作">
-          <template>
-            <el-button type="text"></el-button>
-            <el-button type="text">修改</el-button>
-            <el-button type="text">删除</el-button>
+          <template slot-scope="{ row }">
+             <el-button type="text" @click="changeState(row.state, row.id)">
+              {{ row.state === 1 ? "禁用" : "启用" }}</el-button
+            >
+            <el-button type="text" :disabled="row.state ? true : false" @click="newBtn2(row.id)">修改</el-button>
+            <el-button type="text" :disabled="row.state ? true : false" @click="deleteSub(row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
 
       <!-- 分页区域 -->
-      <pagination-add
-        :page="queryList.page"
-        :pagesize="queryList.pagesize"
-        :counts="counts"
-        @handleSizeChange="handleSizeChange"
-        @handleCurrentChange="handleCurrentChange"
-      />
+          <el-row type="flex" justify="center" align="middle" style="height: 60px">
+        <el-pagination
+          background
+          layout="prev, pager, next,sizes,jumper"
+          :page-sizes="[2, 4, 6, 8, 10]"
+          :total="total"
+          :current-page="queryList.page"
+          :page-size="queryList.pagesize"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        >
+          >
+        </el-pagination>
+      </el-row>
     </el-card>
 
     <!-- 添加标签弹框 -->
-    <el-dialog title="新增目录" width="20%" @close="restDir">
-      <!-- 主体区域 -->
-      <el-row>
-        <el-col>
-          <el-form label-width="80px" class="demo-ruleForm">
-            <el-form-item class="elform" label="所属学科">
-              <el-select placeholder="请选择" style="width: 100%">
-                <el-option> </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item class="elform" label="目录名称" prop="tagName">
-              <el-input
-                placeholder="请输入目录名称"
-                style="width: 100%"
-              ></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <span slot="footer" class="dialog-footer">
-        <el-button>取 消</el-button>
-        <el-button type="primary">确 定</el-button>
-      </span>
-    </el-dialog>
-
-    <!-- 修改标签弹框 -->
-    <el-dialog title="修改目录" width="20%" @close="restDir">
-      <!-- 主体区域 -->
-      <el-row>
-        <el-col>
-          <el-form label-width="80px" class="demo-ruleForm">
-            <el-form-item class="elform" label="所属学科">
-              <el-select placeholder="请选择" style="width: 100%">
-                <el-option
-                  :label="item.label"
-                  :value="item.value"
-                  v-for="item in addFrom"
-                  :key="item.value"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item class="elform" label="目录名称" prop="tagName">
-              <el-input
-                placeholder="请输入目录名称"
-                style="width: 100%"
-              ></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <span slot="footer" class="dialog-footer">
-        <el-button>取 消</el-button>
-        <el-button type="primary">确 定</el-button>
-      </span>
-    </el-dialog>
+        <Dialog :title="ruleForm.creatorID ? '修改标签' : '新增标签'" :isShow.sync="showDialog" @submit="submit">
+      <el-form
+        :model="ruleForm"
+        ref="directorysFormRef"
+        :rules="rules"
+        label-width="80px"
+        :inline="false"
+        size="normal"
+      >
+        <el-form-item label="所属学科" prop="directoryName">
+          <el-select
+            v-model="ruleForm.subjectID"
+            @focus="handleSelected"
+            size="medium"
+            style="width: 264px"
+          >
+            <el-option
+              v-for="item in list"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="目录名称" prop="directoryName">
+          <el-input v-model="ruleForm.tagName" size="medium"></el-input>
+        </el-form-item>
+      </el-form>
+    </Dialog>
   </div>
 </template>
 
 <script>
+import { simpleSubject } from '@/api/hmmm/subjects.js'
+import { list, remove, detail, update, changeState, add } from '@/api/hmmm/tags.js'
 export default {
-  name: 'Tags',
+  name: 'Directorys',
   data () {
     return {
       queryList: {
         page: 1,
-        pagesize: 10,
-        subjectName: ''
+        pagesize: 10
+      },
+      total: 0,
+      showDialog: false,
+      counts: '',
+      directoryList: [],
+      inputList: {
+        directoryName: '',
+        state: ''
+      },
+      list: [],
+      ruleForm: {
+        subjectID: '',
+        tagName: ''
+      },
+      rules: {
+        state: [
+          { required: true, message: '请输入目录名称', trigger: 'blur' },
+          { min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur' }
+        ]
       }
     }
   },
+
   components: {},
-  computed: {},
+  // 调用请求
+  created () {
+    this.getTags()
+  },
+  // 获取地址栏数据
+  computed: {
+  },
   watch: {},
-  created () {},
-  methods: {}
+  methods: {
+    async getTags () {
+      const res = await list(this.queryList)
+      console.log(res)
+      this.directoryList = res.data.items
+      this.counts = res.data.counts
+    },
+    handleSizeChange (val) {
+      this.queryList.pagesize = val
+      this.getTags()
+    },
+    handleCurrentChange (val) {
+      this.queryList.page = val
+      this.getTags()
+    },
+    clearSub () {
+      this.inputList.directoryName = ''
+      this.inputList.state = ''
+    },
+    async SearchIn () {
+      this.queryList.page = 1
+      const res = await list({
+        ...this.queryList,
+        directoryName: this.inputList.directoryName,
+        state: this.inputList.state
+      })
+      this.directoryList = res.data.items
+    },
+    newBtn () {
+      this.showDialog = true
+    },
+    async changeState (state, id) {
+      if (state) {
+        state = 0
+      } else {
+        state = 1
+      }
+      await changeState({
+        id,
+        state
+      })
+      this.getTags()
+    },
+
+    async newBtn2 (id) {
+      this.showDialog = true
+      const res = await detail(id)
+      this.ruleForm = res.data
+    },
+    // 新增
+    async submit () {
+      await this.$refs.directorysFormRef.validate()
+      try {
+        if (this.ruleForm.creatorID) {
+          await update(this.ruleForm)
+          this.$message.success('修改成功')
+        } else {
+          await add(this.ruleForm)
+          this.$message.success('添加成功')
+        }
+        this.getTags()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async handleSelected () {
+      try {
+        const { data } = await simpleSubject(this.directoryList.subjectName)
+        console.log(data)
+        this.list = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // 删除
+    async deleteSub (id) {
+      try {
+        const { data } = await remove(id)
+        console.log(data)
+        await this.$confirm('确认删除吗')
+        this.getTags()
+        this.$message.success('删除成功')
+      } catch (error) {
+        this.$message.error('删除失败!')
+      }
+    }
+  }
 }
 </script>
 

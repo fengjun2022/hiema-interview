@@ -54,7 +54,11 @@
           <el-table-column prop="subjectName" label="学科名称">
           </el-table-column>
           <el-table-column prop="username" label="创建者"> </el-table-column>
-          <el-table-column prop="addDate" label="创建日期"> </el-table-column>
+          <el-table-column prop="addDate" label="创建日期">
+             <template slot-scope="{ row }">
+            {{ row.addDate | parseTimeByString }}
+          </template>
+          </el-table-column>
           <el-table-column prop="isFrontDisplay" label="前台是否显示">
             <template slot-scope="scope">
               {{ scope.row.isFrontDisplay === 1 ? "是" : "否" }}
@@ -101,7 +105,7 @@
           background
           layout="prev, pager, next,sizes,jumper"
           :page-sizes="[2, 4, 6, 8, 10]"
-          :total="counts"
+          :total="total"
           :current-page="paginationInfo.page"
           :page-size="paginationInfo.pagesize"
           @size-change="handleSizeChange"
