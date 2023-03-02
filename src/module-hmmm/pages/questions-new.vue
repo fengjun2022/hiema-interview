@@ -133,28 +133,26 @@ export default {
 
       // 判断单选多选
       select: 1,
-      Options: ['A', 'B', 'C', 'D']
+      Options: ['A', 'B', 'C', 'D'],
+      code: 68
     }
   },
   methods: {
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
+    // submitForm (formName) {
+    //   this.$refs[formName].validate((valid) => {
+    //     if (valid) {
+    //       alert('submit!')
+    //     } else {
+    //       console.log('error submit!!')
+    //       return false
+    //     }
+    //   })
+    // },
     resetForm (formName) {
       this.$refs[formName].resetFields()
     },
     addOptions () {
-      let code = 68
-      code = code + 1
-      this.Options.push(String.fromCharCode(code))
-      console.log(this.Options)
+      this.Options.push(String.fromCharCode(++this.code))
     }
 
   }
