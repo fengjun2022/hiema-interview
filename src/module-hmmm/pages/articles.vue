@@ -1,44 +1,31 @@
 <template>
-  <div class='container'>
-  <el-card>
-<Search :formItemList="formItemList" :emitSearch="emitSearch"  @search="search">
-<template #btn>
-<el-row>
-  <el-button class="btn" size="medium" type="primary" @click="edit">
-    <i class="el-icon-edit"></i>
-    新增加技巧</el-button>
-</el-row>
- </template>
-</Search>
- <el-alert
-    title="数据统一()条"
-    type="info"
-    show-icon>
-  </el-alert>
-  <Table :pageInfo='pageInfo' :paginationShow='paginationShow' :tableData='tableData' :tableColumnOptions='tableColumnOptions'></Table>
-  </el-card>
+  <div class="container">
+    <el-card>
+      <Search :form-item-list="formItemList" :emit-search="emitSearch" @search="search">
+        <template #btn>
+          <el-row>
+            <el-button class="btn" size="medium" type="primary" @click="edit">
+              <i class="el-icon-edit" />
+              新增加技巧</el-button>
+          </el-row>
+        </template>
+      </Search>
+      <PkgTable :page-info="pageInfo" :pagination-show="paginationShow" :table-data="tableData" :table-column-options="tableColumnOptions" />
+    </el-card>
   </div>
 </template>
 
 <script>
-import Search from '../components/articles-search'
-import Table from '../components/index.vue'
 import { list } from '@/api/hmmm/articles.js'
+import CompanysEnum from '@/api/base/baseApi.js'
 export default {
-  components: {
-    Search,
-    Table
-  },
-  data () {
+  data() {
     return {
       dialogVisible: false,
       emitSearch: false,
       formItemList: [
         { label: '关键词', type: 'input', param: 'title', placeholder: '根据文章标题搜索' },
-        { label: '关键词', type: 'input', param: 'title', placeholder: '根据文章标题搜索' },
-        { label: '状态', type: 'select', selectOptions: [{ name: '启动', value: '1' }, { name: '禁止使用', value: '0' }], param: 'state', placeholder: '请选择' },
         { label: '状态', type: 'select', selectOptions: [{ name: '启动', value: '1' }, { name: '禁止使用', value: '0' }], param: 'state', placeholder: '请选择' }
-
       ],
       pageInfo: {
         page: 1,
@@ -57,29 +44,30 @@ export default {
         { columnType: false, label: '状态', prop: 'state', width: '200px' },
         { columnType: false, label: '操作', prop: 'tags', width: '200px' }
 
-      ]
-
+      ],
+      CompanysEnum
     }
   },
-  created () {
+  created() {
     this.getList()
   },
   methods: {
     // 搜索条件改变时重新渲染数据
-    search (params) {
+    search(params) {
       this.getList({ keyword: params.title })
     },
 
     // 添加技巧
-    edit () {
+    edit() {
       console.log(1111)
     },
     // 获取数据
-    async getList (res) {
+    async getList(res) {
       const { data } = await list(res)
       this.tableData = data.items
       console.log(this.tableData)
     }
+
   }
 
 }
