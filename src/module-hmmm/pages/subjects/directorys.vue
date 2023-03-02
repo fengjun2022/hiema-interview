@@ -154,7 +154,9 @@ export default {
     return {
       queryList: {
         page: 1,
-        pagesize: 10
+        pagesize: 10,
+        directoryName: '',
+        state: null
       },
       showDialog: false,
       total: 0,
@@ -206,8 +208,8 @@ export default {
       this.getDirectory()
     },
     clearSub () {
-      this.inputList.directoryName = ''
-      this.inputList.state = ''
+      this.queryList.directoryName = ''
+      this.queryList.state = ''
     },
     async SearchIn () {
       this.queryList.page = 1
