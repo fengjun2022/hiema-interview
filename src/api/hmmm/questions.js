@@ -6,3 +6,25 @@
  *
  * 题库有关的接口：自己写吧~~  已经被张老师删了 ^_^
  */
+import { createAPI } from '@/utils/request'
+
+export const getBaseInfo = data => createAPI('/questions', 'get', data)
+
+export const deleteBaseInfo = id => createAPI(`/questions/${id}`, 'delete')
+
+export const getBaseById = id => createAPI(`/questions/${id}`, 'get')
+
+export const getChoiceInfo = data => createAPI('/questions/choice', 'get', data)
+
+// 切换是否加入精选
+export const toggleChoiceState = ({ id, choiceState }) => createAPI(`/questions/choice/${id}/${choiceState}`, 'patch')
+
+// 切换是否上架
+export const togglePublishState = ({ id, publishState }) => createAPI(`/questions/choice/${id}/${publishState}`, 'post')
+// 试题审核
+export const changeChkState = data => createAPI(`/questions/check/${data.id}`, 'post', data)
+
+// 组题列表
+export const getRandomInfo = data => createAPI('/questions/randoms/', 'get', data)
+
+export const deleteRandom = id => createAPI(`/questions/randoms/${id}`, 'delete')
