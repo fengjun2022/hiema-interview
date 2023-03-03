@@ -1,5 +1,5 @@
 <template>
-  <div class='container'>试题预览对话框</div>
+  <div class="container">试题预览对话框</div>
 </template>
 
 <script>
