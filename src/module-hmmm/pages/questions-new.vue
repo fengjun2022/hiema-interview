@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <template>
   <div class="container">
     <el-form
@@ -419,4 +417,3 @@ export default {
   margin: 10px 0;
 }
 </style>
->>>>>>> feature/questions-new

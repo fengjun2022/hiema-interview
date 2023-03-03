@@ -1,30 +1,5 @@
 <template>
-  <div class="container">
-    <Search ref="Search" :form-options="formOptions" @search="search" @reset="getCompanysList" @handleChange="handleChange" @addUser="addUser" />
-    <el-card shadow="always">
-      <PkgTable :page-info="pageInfo" :pagination-show="paginationShow" :table-data="tableData" :table-column-options="tableColumnOptions" @changeCurrentPage="handleCurrentChange" @changeSize="handleSizeChange">
-        <!-- 自定义操作结构 -->
-        <template #handle="{data}">
-          <el-button :type="data.state===1?'warning':'success'" :icon="data.state===1?'el-icon-close':'el-icon-check'" circle @click="changeState({...data,state:+!data.state})" />
-          <el-button :disabled="data.state===1?false:true" type="info" icon="el-icon-edit" circle @click="edit(data.id)" />
-          <el-button :disabled="data.state===1?false:true" type="danger" icon="el-icon-delete" circle @click="del(data.id)" />
-        </template>
-        <!-- 格式化日期 -->
-        <template #date="{data}">
-          {{ data.addDate | formatDate }}
-        </template>
-        <!-- 格式化状态 -->
-        <template #state="{data}">
-          <el-switch ref="switch" :value="+data.state === 1" active-color="#53b6f4" inactive-color="#ff4949" />
-        </template>
-        <!-- 格式化创建者 -->
-        <template #creator="{data}">
-          {{ creatorName(data.creatorID) }}
-        </template>
-      </PkgTable>
-      <CompanysAdd ref="CompanysAdd" :is-show-dialog.sync="isShowDialog" @updateList="getCompanysList" />
-    </el-card>
-  </div>
+  <div class='container'>111</div>
 </template>
 
 <script>

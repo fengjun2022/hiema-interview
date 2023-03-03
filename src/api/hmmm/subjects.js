@@ -7,7 +7,14 @@
  * 学科有关的接口：自己写吧~~  已经被张老师删了 ^_^
  */
 import { createAPI } from '@/utils/request'
+export const getsubjects = data => createAPI('/subjects', 'get', data)
+// 学科添加
+export const addsubjects = data => createAPI('/subjects', 'post', data)
+// 学科详情
+export const getsubject = id => createAPI(`/subjects/${id}`, 'get')
+// 学科修改
+export const editsubjects = data => createAPI(`/subjects/${data.id}`, 'put', data)
+// 删除学科
+export const deletesubjects = id => createAPI(`/subjects/${id}`, 'delete')
 
-export const getSubjectsList = data => createAPI('/subjects', 'get', data)
-
-export const getTwoList = data => createAPI('/tags', 'get', data)
+export const simpleSubject = data => createAPI('/subjects/simple', 'get', data)
