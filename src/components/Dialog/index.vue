@@ -1,26 +1,25 @@
 <template>
   <div>
 
-<el-dialog
+    <el-dialog
+      v-if="isShow"
+      :title="title"
+      :visible="isShow"
+      :width="dialog_width"
+      @close="cancel"
+    >
 
-  :title="title"
-  :visible="isShow"
- :width="dialog_width"
-  @close="cancel"
-  >
-  <el-form :ref="Formname" :model="Formname" label-width="80px">
-  <slot>请传入slot</slot>
-  </el-form>
+      <slot>请传入slot</slot>
 
-  <span slot="footer" class="dialog-footer">
-    <el-button v-if="btn" type="primary" @click="cancel">关闭</el-button>
- <div v-if="!btn">
-     <el-button   @click="cancel">取 消</el-button>
-    <el-button   type="primary" @click="determine">确 定</el-button>
- </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button v-if="btn" type="primary" @click="cancel">关闭</el-button>
+        <div v-if="!btn">
+          <el-button @click="cancel">取 消</el-button>
+          <el-button type="primary" @click="determine">确 定</el-button>
+        </div>
 
-  </span>
-</el-dialog>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -49,46 +48,40 @@ export default {
     btn: {
       type: Boolean,
       default: false
-    },
-    Formname: {
-      type: Object,
-      required: true
-
     }
 
   },
 
-  data () {
+  data() {
     return {
 
     }
   },
-  mounted () {
-  },
   computed: {
 
   },
+  mounted() {
+  },
   methods: {
-    cancel () {
+    cancel() {
       this.$emit('update:isShow', false)
-      this.$refs[this.Formname].resetFields()
       this.$emit('update:form', this.resets(this.form))
     },
-    async determine () {
+    async determine() {
       this.$confirm('您确定提交吗？').then(async _ => {
         this.$emit('submit', submit)
-        function submit (fn) {
+        function submit(fn) {
           return fn()
         }
         this.$emit('update:isShow', false)
-        this.$refs[this.Formname].resetFields()
+
         this.$emit('update:form', this.resets(this.form))
       })
     },
 
-    resets (data) {
+    resets(data) {
       if (!data && data !== {}) return
-      console.log(11)
+
       if (data.constructor === Object) {
         Object.keys(data).forEach(item => { data[item] = '' })
       } else if (data.constructor === Array) {

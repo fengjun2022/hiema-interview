@@ -1,38 +1,50 @@
 <template>
-  <div>
-    <!-- alert -->
-    <el-alert :title="`共${pageInfo.counts}条记录`" type="info" effect="dark" show-icon :closable="false" center />
+  <div id="Wrap">
     <!-- 表格 -->
-    <el-table max-height="500px" class="table" :data="tableData" border stripe highlight-current-row>
+    <el-table max-height="500px" class="table" :data="tableData" border>
       <!-- index -->
       <el-table-column type="index" header-align="center" align="center" width="80" label="序号" />
       <!-- 其他 -->
       <template v-for="item in tableColumnOptions">
         <!-- 插槽列 -->
-        <el-table-column v-if="item.columnType" :key="item.label" :prop="item.prop" :label="item.label" :width="item.width" :header-align="item.headerAlign || 'center'" :align="item.align || 'center'" :fixed="item.position">
+        <el-table-column
+          v-if="item.columnType"
+          :key="item.label"
+          :prop="item.prop"
+          :label="item.label"
+          :width="item.width"
+          :header-align="item.headerAlign || 'center'"
+          :align="item.align || 'center'"
+        >
           <template #default="{ row }">
             <slot :name="item.slotName" :data="row" />
           </template>
         </el-table-column>
         <!-- 非插槽列 -->
-        <el-table-column v-else :key="item.label" :prop="item.prop" :label="item.label" :width="item.width" :header-align="item.headerAlign || 'center'" :align="item.align || 'center'" :fixed="item.position" />
+        <el-table-column
+          v-else
+          :key="item.label"
+          :prop="item.prop"
+          :label="item.label"
+          :width="item.width"
+          :header-align="item.headerAlign || 'center'"
+          :align="item.align || 'center'"
+        />
       </template>
     </el-table>
     <!-- 分页器 -->
-    <el-row type="flex" justify="center" style="margin-top: 20px">
+    <div v-if="paginationShow" class="pagination">
       <el-pagination
-        background
         :hide-on-single-page="isShowPagination"
-        :page-sizes="[5, 10, 20, 50]"
+        :page-sizes="[5,10,20,25]"
         :current-page="pageInfo.page"
         :page-size="pageInfo.pagesize"
-        :total="pageInfo.counts"
+        :total="pageInfo.pages"
         layout="total, sizes, prev, pager, next, jumper"
-        center
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
-    </el-row>
+    </div>
   </div>
 </template>
 <script>
@@ -50,10 +62,10 @@ export default {
       require: true,
       default: () => []
     },
-    // 分页数据 ---- page:当前页 pagesize：每页数量
+    // 分页数据 ---- page:当前页 pagesize：每页数量 pages:总页数
     pageInfo: {
       type: Object,
-      default: () => { }
+      default: () => {}
     },
     // 是否显示分页器
     paginationShow: {
@@ -81,4 +93,5 @@ export default {
 }
 </script>
 <style  scoped lang = 'scss'>
+
 </style>

@@ -79,6 +79,7 @@ export default {
     imgChange (file, fileList) {
       this.fileList = fileList
       console.log(fileList)
+      this.$emit('flieurl', fileList[0].url)
       this.noneBtnImg = fileList.length >= this.limitCountImg
     },
     // 删除文件的回调

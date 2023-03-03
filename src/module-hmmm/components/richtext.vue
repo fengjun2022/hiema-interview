@@ -2,26 +2,32 @@
   <div>
     <div>
       <quill-editor
-        v-model="content"
         ref="myQuillEditor"
+        v-model="content"
         :options="editorOption"
+        style="width: 98%; height:200px"
         @blur="onEditorBlur($event)"
         @focus="onEditorFocus($event)"
         @change="onEditorChange($event)"
         @ready="onEditorReady($event)"
-         style="width: 98%; height:200px"
-      >
-      </quill-editor>
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { quillEditor } from 'vue-quill-editor'
+
 export default {
   name: 'HomeView',
   components: { quillEditor },
-  data () {
+  props: {
+    contents: {
+      type: String
+    }
+  },
+
+  data() {
     return {
       content: '',
       TiLength: 0,
@@ -69,25 +75,29 @@ export default {
   },
 
   methods: {
-    onSubmit () {
+    onSubmit() {
       console.log('submit!')
     },
     // 失去焦点事件
-    onEditorBlur (quill) {
+    onEditorBlur(quill) {
       console.log('editor blur!', quill)
+      this.$emit('texts', this.content)
+      this.$emit('qTexts', this.content)
     },
     // 获得焦点事件
-    onEditorFocus (quill) {
-      console.log('editor focus!', quill)
+    onEditorFocus(quill) {
+
     },
     // 准备富文本编辑器
-    onEditorReady (quill) {
-      console.log('editor ready!', quill)
+    onEditorReady(quill) {
+      this.content = this.contents
     },
     // 内容改变事件
-    onEditorChange ({ quill, html, text }) {
-      console.log('editor change!', quill, html, text)
+    onEditorChange({ quill, html, text }) {
       this.content = html
+      this.$emit('qTexts', this.content)
+
+      this.$emit('texts', this.content)
     }
   }
 }
