@@ -1,11 +1,15 @@
 
 <template>
   <div class="dialog-search">
-    <el-form ref="ruleForm" :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item v-for="(item,index) in formItemList" :key="index" :label="item.label">
-        <el-input v-if="item.type=='input'" v-model="formInline[item.param]" :placeholder="item.placeholder" style="margin-right:10px;width:80%" />
-        <el-select v-if="item.type=='select'" v-model="formInline[item.param]" :placeholder="item.placeholder" style="margin-right:10px">
-          <el-option v-for="(item2,index2) in item.selectOptions" :key="index2" :label="item2.name" :value="item2.value" />
+    <el-form ref="ruleForm" :inline="true" :model="formData" class="demo-form-inline">
+      <el-form-item v-for="(item,index) in formOptions" :key="index" :label="item.label">
+        <!-- 普通输入框 -->
+        <el-input v-if="item.type=='input'" v-model="formData[item.param]" :placeholder="item.placeholder" style="margin-right:10px;width:80%" />
+        <el-select v-if="item.type=='select'" v-model="formData[item.param]" :placeholder="item.placeholder" style="margin-right:10px" @change="handleChange">
+          <el-option v-for="(item2,index2) in item.selectOptions" :key="index2" :label="item2" :value="item2" />
+        </el-select>
+        <el-select v-if="item.type=='selectNormal'" v-model="formData[item.param]" :placeholder="item.placeholder" style="margin-right:10px">
+          <el-option v-for="(item2,index2) in item.selectOptions" :key="index2" :label="item2.value" :value="item2.id" />
         </el-select>
       </el-form-item>
       <el-form-item style="width:12rem">
@@ -21,38 +25,37 @@
 export default {
   name: 'BaseSearch',
   props: {
-    emitSearch: { // 是否立即执行搜索
+    emitSearch: {
       type: Boolean,
       default: false
     },
-    formItemList: {
+    formOptions: {
       type: Array,
       default: () => []
-
     }
   },
   data() {
-    const formInline = {}
-    for (const obj of this.formItemList) {
-      formInline[obj.param] = obj.defaultSelect || ''
+    const formData = {}
+    for (const obj of this.formOptions) {
+      formData[obj.param] = obj.defaultSelect || ''
     }
     return {
-      formInline
+      formData
     }
   },
   watch: {
     emitSearch(newVal, oldVal) {
-      // 是否立即触发搜索  用在弹窗中异步请求下拉框后  或者给下拉框赋值默认值后  需要用到这个方法
+      // 是否立即触发搜索 弹窗中异步请求下拉框后或给下拉框赋值默认值后
       if (newVal) {
         console.log('此时触发--立即执行搜索')
-        this.$emit('search', this.formInline)
+        this.$emit('search', this.formData)
       }
     },
-    formItemList: {
+    formOptions: {
       handler(newVal, oldVal) {
-        for (const obj of this.formItemList) {
+        for (const obj of this.formOptions) {
           if (obj.defaultSelect) {
-            this.formInline[obj.param] = obj.defaultSelect
+            this.formData[obj.param] = obj.defaultSelect
           }
         }
       },
@@ -61,18 +64,19 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$emit('search', this.formInline)
+      this.$emit('search', this.formData)
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
-      const formInline = {}
-      for (const obj of this.formItemList) {
-        // 所有筛选条件清空
-        formInline[obj.param] = ''
+      const formData = {}
+      for (const obj of this.formOptions) {
+        formData[obj.param] = ''
       }
-      this.formInline = formInline
-
-      this.$emit('search', this.formInline)
+      this.formData = formData
+      this.$emit('reset')
+    },
+    handleChange(currentItem) {
+      this.$emit('handleChange', currentItem)
     }
   }
 }
