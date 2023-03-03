@@ -48,7 +48,7 @@ export default {
       paginationShow: true,
       tableData: [],
       tableColumnOptions: [
-        { columnType: false, label: '企业编号', prop: 'number', width: '210px' },
+        { columnType: true, label: '企业编号', prop: 'number', width: '210px' },
         { columnType: false, label: '企业简称', prop: 'shortName', width: '200px' },
         { columnType: false, label: '标签', prop: 'tags', width: '100px' },
         { columnType: true, label: '创建者', prop: 'creatorID', width: '70px', slotName: 'creator' },

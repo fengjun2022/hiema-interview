@@ -186,3 +186,29 @@ export function toThousandslsFilter(num) {
     .toString()
     .replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
 }
+
+// 格式化难度,题型
+export function questionType(val) {
+  switch (val) {
+    case '1':
+      return '单选'
+    case '2':
+      return '多选'
+    case '3':
+      return '简答'
+    default:
+      break
+  }
+}
+export function difficulty(val) {
+  switch (val) {
+    case '1':
+      return '简单'
+    case '2':
+      return '一般'
+    case '3':
+      return '困难'
+    default:
+      break
+  }
+}
