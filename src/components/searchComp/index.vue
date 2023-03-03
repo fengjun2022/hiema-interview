@@ -121,12 +121,10 @@ export default {
       const res = citys(this.form.province)
       this.citys = res
     },
-    // 修改触发事件获取下级城市
+    // 修改触发事件获取学科城市
     async changeSubjectId() {
-      console.log(this.form.subjectID)
       const res = await getTwoList({ ...this.page, subjectID: this.form.subjectID })
       this.twoSubjects = res.data.items
-      console.log(this.twoSubjects)
     },
     async getSubjectsList() {
       const res = await getSubjectsList(this.page)

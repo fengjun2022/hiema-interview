@@ -21,3 +21,10 @@ export const toggleChoiceState = ({ id, choiceState }) => createAPI(`/questions/
 
 // 切换是否上架
 export const togglePublishState = ({ id, publishState }) => createAPI(`/questions/choice/${id}/${publishState}`, 'post')
+// 试题审核
+export const changeChkState = data => createAPI(`/questions/check/${data.id}`, 'post', data)
+
+// 组题列表
+export const getRandomInfo = data => createAPI('/questions/randoms/', 'get', data)
+
+export const deleteRandom = id => createAPI(`/questions/randoms/${id}`, 'delete')

@@ -89,5 +89,23 @@ export default [
         meta: { title: '标签', noCache: true, icon: 'component' }
       }
     ]
+  },
+  {
+    path: '/articles',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'skills',
+    meta: {
+      title: '面试技巧',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: 'list',
+        component: _import('hmmm/pages/articles'),
+        name: 'list',
+        meta: { title: '面试技巧', noCache: true, icon: 'component' }
+      }
+    ]
   }
 ]

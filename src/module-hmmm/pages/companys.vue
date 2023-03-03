@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Search :form-options="formOptions" @search="search" @reset="getCompanysList" @handleChange="handleChange" />
     <el-card shadow="always">
       <PkgTable :page-info="pageInfo" :pagination-show="paginationShow" :table-data="tableData" :table-column-options="tableColumnOptions" @changeCurrentPage="handleCurrentChange" @changeSize="handleSizeChange">
         <!-- 自定义操作结构 -->
@@ -26,9 +27,11 @@
 </template>
 
 <script>
+import { provinces, citys } from '@/api/hmmm/citys.js'
 import { list, remove, disabled } from '@/api/hmmm/companys.js'
 import CompanysEnum from '@/api/base/baseApi.js'
 export default {
+  name: 'CompanysView',
   data() {
     return {
       pageInfo: {
@@ -47,6 +50,13 @@ export default {
         { columnType: false, label: '备注', prop: 'remarks', width: '200px' },
         { columnType: true, label: '状态', prop: 'state', width: '100px', slotName: 'state' },
         { columnType: true, label: '操作', width: '200px', slotName: 'handle', position: 'right' }
+      ],
+      formOptions: [
+        { label: '标签名称', type: 'input', param: 'tags', placeholder: '请输入' },
+        { label: '城市', type: 'select', param: 'province', placeholder: '请选择', selectOptions: provinces() },
+        { label: '地区', type: 'select', param: 'city', placeholder: '请选择', selectOptions: citys },
+        { label: '企业简称', type: 'input', param: 'shortName', placeholder: '请输入' },
+        { label: '状态', type: 'selectNormal', param: 'state', placeholder: '请选择', selectOptions: CompanysEnum.status }
       ]
     }
   },
@@ -54,8 +64,8 @@ export default {
     this.getCompanysList()
   },
   methods: {
-    async getCompanysList() {
-      const { data: { page, pagesize, counts, items }} = await list(this.pageInfo)
+    async getCompanysList(formData) {
+      const { data: { page, pagesize, counts, items }} = await list({ ...this.pageInfo, ...formData })
       this.tableData = items
       this.pageInfo.page = +page
       this.pageInfo.pagesize = +pagesize
@@ -96,6 +106,12 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    search(formData) {
+      this.getCompanysList(formData)
+    },
+    handleChange(currentItem, id) {
+      this.formOptions[2].selectOptions = citys(currentItem)
     }
   }
 }

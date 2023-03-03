@@ -1,4 +1,4 @@
-export function formatDate (date, fmt = 'yyyy-MM-dd') {
+export function formatDate(date, fmt = 'yyyy-MM-dd') {
   if (!(date instanceof Array)) {
     date = new Date(date)
   }
@@ -21,18 +21,18 @@ export function formatDate (date, fmt = 'yyyy-MM-dd') {
   return fmt
 }
 
-function padLeftZero (str) {
+function padLeftZero(str) {
   return ('00' + str).substr(str.length)
 }
 
-function pluralize (time, label) {
+function pluralize(time, label) {
   if (time === 1) {
     return time + label
   }
   return time + label + 's'
 }
 
-export function timeAgo (time) {
+export function timeAgo(time) {
   const between = Date.now() / 1000 - Number(time)
   if (between < 3600) {
     return pluralize(~~(between / 60), ' minute')
@@ -43,7 +43,7 @@ export function timeAgo (time) {
   }
 }
 
-export function parseTime (time, cFormat) {
+export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
     return null
   }
@@ -81,7 +81,7 @@ export function parseTime (time, cFormat) {
   return timeStr
 }
 
-export function parseTimeByString (time, cFormat) {
+export function parseTimeByString(time, cFormat) {
   if (arguments.length === 0) {
     return null
   }
@@ -119,7 +119,7 @@ export function parseTimeByString (time, cFormat) {
   return timeStr
 }
 
-export function formatTime (time, option) {
+export function formatTime(time, option) {
   time = +time * 1000
   const d = new Date(time)
   const now = Date.now()
@@ -154,7 +154,7 @@ export function formatTime (time, option) {
 }
 
 /* 数字 格式化 */
-export function nFormatter (num, digits) {
+export function nFormatter(num, digits) {
   const si = [
     { value: 1e18, symbol: 'E' },
     { value: 1e15, symbol: 'P' },
@@ -175,14 +175,40 @@ export function nFormatter (num, digits) {
   return num.toString()
 }
 
-export function html2Text (val) {
+export function html2Text(val) {
   const div = document.createElement('div')
   div.innerHTML = val
   return div.textContent || div.innerText
 }
 
-export function toThousandslsFilter (num) {
+export function toThousandslsFilter(num) {
   return (+num || 0)
     .toString()
     .replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
+}
+
+// 格式化难度,题型
+export function questionType(val) {
+  switch (val) {
+    case '1':
+      return '单选'
+    case '2':
+      return '多选'
+    case '3':
+      return '简答'
+    default:
+      break
+  }
+}
+export function difficulty(val) {
+  switch (val) {
+    case '1':
+      return '简单'
+    case '2':
+      return '一般'
+    case '3':
+      return '困难'
+    default:
+      break
+  }
 }
