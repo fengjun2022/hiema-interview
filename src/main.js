@@ -21,9 +21,12 @@ import dashboard from '@/module-dashboard/' // 面板
 import base from '@/module-manage/' // 用户管理
 import hmmm from '@/module-hmmm/' // 黑马面面
 
-// 全局注册自定义组件
-import Component from '@/components'
-Vue.use(Component)
+import VueQuillEditor from 'vue-quill-editor'// 调用编辑器
+// 样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import uploadImg from '@/components/uploadImg'
 
 Vue.use(dashboard, store)
 Vue.use(base, store)
@@ -31,12 +34,13 @@ Vue.use(base, store)
 // Vue.use(form, store)
 // Vue.use(details, store)
 Vue.use(hmmm, store)
-
+Vue.use(VueQuillEditor) // 富文本
 /*
  * 注册 - 组件
  */
 
 Vue.component('Dialog', Dialog)
+Vue.component('uploadImg', uploadImg)
 
 // 饿了么
 Vue.use(Element, {

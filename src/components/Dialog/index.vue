@@ -1,5 +1,9 @@
 <template>
   <div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature/questions-new
     <el-dialog
       v-if="isShow"
       :title="title"
@@ -7,13 +11,23 @@
       :width="dialog_width"
       @close="cancel"
     >
+<<<<<<< HEAD
       <slot>请传入slot</slot>
+=======
+
+      <slot>请传入slot</slot>
+
+>>>>>>> feature/questions-new
       <span slot="footer" class="dialog-footer">
         <el-button v-if="btn" type="primary" @click="cancel">关闭</el-button>
         <div v-if="!btn">
           <el-button @click="cancel">取 消</el-button>
           <el-button type="primary" @click="determine">确 定</el-button>
         </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature/questions-new
       </span>
     </el-dialog>
   </div>
@@ -40,20 +54,38 @@ export default {
     // 当前form表单值
     form: [Array, Object, String],
     // 自定义 按钮 true显示关闭隐藏取消确定
+<<<<<<< HEAD
+=======
+
+    btn: {
+      type: Boolean,
+      default: false
+    }
+
+  },
+
+  data() {
+    return {
+>>>>>>> feature/questions-new
 
     btn: {
       type: Boolean,
       default: false
     }
   },
+<<<<<<< HEAD
   data() {
     return {
     }
   },
+=======
+>>>>>>> feature/questions-new
   computed: {
   },
   created() {
     console.log(this.formname)
+  },
+  mounted() {
   },
   mounted() {
   },
@@ -69,12 +101,17 @@ export default {
           return fn()
         }
         this.$emit('update:isShow', false)
+
         this.$emit('update:form', this.resets(this.form))
       })
     },
 
     resets(data) {
       if (!data && data !== {}) return
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature/questions-new
       if (data.constructor === Object) {
         Object.keys(data).forEach(item => { data[item] = '' })
       } else if (data.constructor === Array) {

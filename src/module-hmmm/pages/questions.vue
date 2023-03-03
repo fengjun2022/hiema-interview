@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div>
     <searchComp :flag="1" />
     <div class="table">
@@ -67,9 +68,12 @@
       <div>【题目备注】：{{ previewDate.remarks }}</div>
     </Dialog>
   </div>
+=======
+  <div />
+>>>>>>> feature/questions-new
 </template>
-
 <script>
+<<<<<<< HEAD
 import searchComp from '@/components/searchComp'
 import { getBaseInfo, deleteBaseInfo, toggleChoiceState, getBaseById } from '@/api/hmmm/questions'
 export default {
@@ -152,4 +156,20 @@ export default {
     margin: 10px;
     background-color: white;
   }
+=======
+export default {
+  components: {
+
+  },
+  props: {
+
+  },
+  setup(props, context) {
+
+  }
+}
+</script>
+<style scoped>
+
+>>>>>>> feature/questions-new
 </style>
