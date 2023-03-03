@@ -7,7 +7,6 @@
  * 题库有关的接口：自己写吧~~  已经被张老师删了 ^_^
  */
 import { createAPI } from '@/utils/request'
-<<<<<<< HEAD
 
 export const getBaseInfo = data => createAPI('/questions', 'get', data)
 
@@ -29,28 +28,26 @@ export const changeChkState = data => createAPI(`/questions/check/${data.id}`, '
 export const getRandomInfo = data => createAPI('/questions/randoms/', 'get', data)
 
 export const deleteRandom = id => createAPI(`/questions/randoms/${id}`, 'delete')
-=======
 // 回显
 export const getQuestionDetail = data => createAPI(`/questions/${data.id}`, 'get', data)
 
-export function getsubjectIDList () {
+export function getsubjectIDList() {
   return createAPI('/subjects/simple', 'get')
 }
 
-export function getCatalogIDList (data) {
+export function getCatalogIDList(data) {
   return createAPI('/directorys', 'get', data)
 }
 
-export function getCompanysList () {
+export function getCompanysList() {
   return createAPI('/companys', 'get', { pagesize: 20 })
 }
 
 // 提交
-export function addQuestions (data) {
+export function addQuestions(data) {
   return createAPI('/questions', 'post', data)
 }
 
-export function setQuestions (id) {
+export function setQuestions(id) {
   return createAPI(`/questions/${id}`, 'GET')
 }
->>>>>>> feature/questions-new

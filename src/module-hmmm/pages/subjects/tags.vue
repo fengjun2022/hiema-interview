@@ -10,25 +10,27 @@
               <el-input
                 v-model="inputList.directoryName"
                 class="inputCol"
-              ></el-input>
+              />
             </el-form-item>
             <el-form-item label="状态">
               <el-select v-model="inputList.state" placeholder="请选择">
-                <el-option label="已启用" :value="1"> </el-option>
-                <el-option label="已禁用" :value="0"> </el-option>
+                <el-option label="已启用" :value="1" />
+                <el-option label="已禁用" :value="0" />
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button size="small" class="colInput" plain @click="clearSub"
-                >清除</el-button
-              >
+              <el-button
+                size="small"
+                class="colInput"
+                plain
+                @click="clearSub"
+              >清除</el-button>
               <el-button
                 size="small"
                 class="colInput"
                 type="primary"
                 @click="SearchIn"
-                >搜索</el-button
-              >
+              >搜索</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -40,8 +42,7 @@
               type="success"
               icon="el-icon-edit"
               @click="newBtn"
-              >新增标签</el-button
-            >
+            >新增标签</el-button>
           </el-col>
         </el-form>
       </el-row>
@@ -52,30 +53,28 @@
         :closable="false"
         type="info"
         show-icon
-      >
-      </el-alert>
+      />
 
       <!-- 表格区域 -->
       <el-table :data="directoryList" style="width: 100%">
-        <el-table-column type="index" label="序号"> </el-table-column>
-        <el-table-column prop="subjectName" label="所属学科"> </el-table-column>
-        <el-table-column prop="tagName" label="目录名称"> </el-table-column>
-        <el-table-column prop="username" label="创建者"> </el-table-column>
+        <el-table-column type="index" label="序号" />
+        <el-table-column prop="subjectName" label="所属学科" />
+        <el-table-column prop="tagName" label="目录名称" />
+        <el-table-column prop="username" label="创建者" />
         <el-table-column prop="addDate" label="创建日期">
           <template slot-scope="{ row }">
             {{ row.addDate | parseTimeByString }}
           </template>
-           </el-table-column>
+        </el-table-column>
         <el-table-column prop="state" label="状态">
-         <template slot-scope="scope">
+          <template slot-scope="scope">
             {{ scope.row.state === 1 ? "已启用" : "已禁用" }}
           </template>
         </el-table-column>
         <el-table-column prop="address" label="操作">
           <template slot-scope="{ row }">
-             <el-button type="text" @click="changeState(row.state, row.id)">
-              {{ row.state === 1 ? "禁用" : "启用" }}</el-button
-            >
+            <el-button type="text" @click="changeState(row.state, row.id)">
+              {{ row.state === 1 ? "禁用" : "启用" }}</el-button>
             <el-button type="text" :disabled="row.state ? true : false" @click="newBtn2(row.id)">修改</el-button>
             <el-button type="text" :disabled="row.state ? true : false" @click="deleteSub(row.id)">删除</el-button>
           </template>
@@ -83,7 +82,7 @@
       </el-table>
 
       <!-- 分页区域 -->
-          <el-row type="flex" justify="center" align="middle" style="height: 60px">
+      <el-row type="flex" justify="center" align="middle" style="height: 60px">
         <el-pagination
           background
           layout="prev, pager, next,sizes,jumper"
@@ -100,10 +99,10 @@
     </el-card>
 
     <!-- 添加标签弹框 -->
-        <Dialog :title="ruleForm.creatorID ? '修改标签' : '新增标签'" :isShow.sync="showDialog" @submit="submit">
+    <Dialog :title="ruleForm.creatorID ? '修改标签' : '新增标签'" :is-show.sync="showDialog" @submit="submit">
       <el-form
-        :model="ruleForm"
         ref="directorysFormRef"
+        :model="ruleForm"
         :rules="rules"
         label-width="80px"
         :inline="false"
@@ -112,21 +111,20 @@
         <el-form-item label="所属学科" prop="directoryName">
           <el-select
             v-model="ruleForm.subjectID"
-            @focus="handleSelected"
             size="medium"
             style="width: 264px"
+            @focus="handleSelected"
           >
             <el-option
               v-for="item in list"
               :key="item.value"
               :label="item.label"
               :value="item.value"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="目录名称" prop="directoryName">
-          <el-input v-model="ruleForm.tagName" size="medium"></el-input>
+          <el-input v-model="ruleForm.tagName" size="medium" />
         </el-form-item>
       </el-form>
     </Dialog>
@@ -138,7 +136,9 @@ import { simpleSubject } from '@/api/hmmm/subjects.js'
 import { list, remove, detail, update, changeState, add } from '@/api/hmmm/tags.js'
 export default {
   name: 'Directorys',
-  data () {
+
+  components: {},
+  data() {
     return {
       queryList: {
         page: 1,
@@ -167,36 +167,34 @@ export default {
       }
     }
   },
-
-  components: {},
-  // 调用请求
-  created () {
-    this.getTags()
-  },
   // 获取地址栏数据
   computed: {
   },
   watch: {},
+  // 调用请求
+  created() {
+    this.getTags()
+  },
   methods: {
-    async getTags () {
+    async getTags() {
       const res = await list(this.queryList)
       console.log(res)
       this.directoryList = res.data.items
       this.counts = res.data.counts
     },
-    handleSizeChange (val) {
+    handleSizeChange(val) {
       this.queryList.pagesize = val
       this.getTags()
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.queryList.page = val
       this.getTags()
     },
-    clearSub () {
+    clearSub() {
       this.queryList.directoryName = ''
       this.queryList.state = ''
     },
-    async SearchIn () {
+    async SearchIn() {
       this.queryList.page = 1
       const res = await list({
         ...this.queryList,
@@ -205,10 +203,10 @@ export default {
       })
       this.directoryList = res.data.items
     },
-    newBtn () {
+    newBtn() {
       this.showDialog = true
     },
-    async changeState (state, id) {
+    async changeState(state, id) {
       if (state) {
         state = 0
       } else {
@@ -221,13 +219,13 @@ export default {
       this.getTags()
     },
 
-    async newBtn2 (id) {
+    async newBtn2(id) {
       this.showDialog = true
       const res = await detail(id)
       this.ruleForm = res.data
     },
     // 新增
-    async submit () {
+    async submit() {
       await this.$refs.directorysFormRef.validate()
       try {
         if (this.ruleForm.creatorID) {
@@ -242,7 +240,7 @@ export default {
         console.log(error)
       }
     },
-    async handleSelected () {
+    async handleSelected() {
       try {
         const { data } = await simpleSubject(this.directoryList.subjectName)
         console.log(data)
@@ -252,7 +250,7 @@ export default {
       }
     },
     // 删除
-    async deleteSub (id) {
+    async deleteSub(id) {
       try {
         const { data } = await remove(id)
         console.log(data)
