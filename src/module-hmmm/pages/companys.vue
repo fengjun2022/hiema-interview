@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <Search :form-options="formOptions" @search="search" @reset="getCompanysList" @handleChange="handleChange" />
+    <Search ref="Search" :form-options="formOptions" @search="search" @reset="getCompanysList" @handleChange="handleChange" @addUser="addUser" />
     <el-card shadow="always">
       <PkgTable :page-info="pageInfo" :pagination-show="paginationShow" :table-data="tableData" :table-column-options="tableColumnOptions" @changeCurrentPage="handleCurrentChange" @changeSize="handleSizeChange">
         <!-- 自定义操作结构 -->
         <template #handle="{data}">
           <el-button :type="data.state===1?'warning':'success'" :icon="data.state===1?'el-icon-close':'el-icon-check'" circle @click="changeState({...data,state:+!data.state})" />
-          <el-button :disabled="data.state===1?false:true" type="info" icon="el-icon-edit" circle />
-          <el-button :disabled="data.state===1?false:true" type="danger" icon="el-icon-delete" circle @click="del(data)" />
+          <el-button :disabled="data.state===1?false:true" type="info" icon="el-icon-edit" circle @click="edit(data.id)" />
+          <el-button :disabled="data.state===1?false:true" type="danger" icon="el-icon-delete" circle @click="del(data.id)" />
         </template>
         <!-- 格式化日期 -->
         <template #date="{data}">
@@ -22,6 +22,7 @@
           {{ creatorName(data.creatorID) }}
         </template>
       </PkgTable>
+      <CompanysAdd ref="CompanysAdd" :is-show-dialog.sync="isShowDialog" @updateList="getCompanysList" />
     </el-card>
   </div>
 </template>
@@ -30,10 +31,15 @@
 import { provinces, citys } from '@/api/hmmm/citys.js'
 import { list, remove, disabled } from '@/api/hmmm/companys.js'
 import CompanysEnum from '@/api/base/baseApi.js'
+import CompanysAdd from '@/module-hmmm/components/companys-add'
 export default {
   name: 'CompanysView',
+  components: {
+    CompanysAdd
+  },
   data() {
     return {
+      isShowDialog: false,
       pageInfo: {
         page: 1,
         pagesize: 5,
@@ -90,10 +96,10 @@ export default {
       this.getCompanysList()
       this.$message.success(`已成功切换到${word}状态`)
     },
-    async del(data) {
+    async del(id) {
       try {
         await this.$confirm('您确定删除吗?')
-        await remove(data)
+        await remove(id)
         if (this.tableData.length === 1 && this.pageInfo.page !== 1) {
           this.pageInfo.page--
         }
@@ -112,6 +118,14 @@ export default {
     },
     handleChange(currentItem, id) {
       this.formOptions[2].selectOptions = citys(currentItem)
+      this.$refs.Search.defaultCity(citys(currentItem)[0])
+    },
+    addUser() {
+      this.isShowDialog = true
+    },
+    async edit(id) {
+      this.isShowDialog = true
+      await this.$refs.CompanysAdd.editData(id)
     }
   }
 }

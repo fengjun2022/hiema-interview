@@ -1,22 +1,28 @@
 
 <template>
   <div class="dialog-search">
-    <el-form ref="ruleForm" :inline="true" :model="formData" class="demo-form-inline">
-      <el-form-item v-for="(item,index) in formOptions" :key="index" :label="item.label">
-        <!-- 普通输入框 -->
-        <el-input v-if="item.type=='input'" v-model="formData[item.param]" :placeholder="item.placeholder" style="margin-right:10px;width:80%" />
-        <el-select v-if="item.type=='select'" v-model="formData[item.param]" :placeholder="item.placeholder" style="margin-right:10px" @change="handleChange">
-          <el-option v-for="(item2,index2) in item.selectOptions" :key="index2" :label="item2" :value="item2" />
-        </el-select>
-        <el-select v-if="item.type=='selectNormal'" v-model="formData[item.param]" :placeholder="item.placeholder" style="margin-right:10px">
-          <el-option v-for="(item2,index2) in item.selectOptions" :key="index2" :label="item2.value" :value="item2.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item style="width:12rem">
-        <el-button @click="resetForm('ruleForm')">清除</el-button>
-        <el-button type="primary" @click="onSubmit">搜索</el-button>
-      </el-form-item>
-    </el-form>
+    <el-card>
+      <el-form ref="ruleForm" :inline="true" :model="formData" class="demo-form-inline">
+        <el-form-item v-for="(item,index) in formOptions" :key="index" :label="item.label">
+          <el-input v-if="item.type=='input'" v-model="formData[item.param]" :placeholder="item.placeholder" style="margin-right:10px;width:80%" />
+          <el-select v-if="item.type=='select'" v-model="formData[item.param]" :placeholder="item.placeholder" style="margin-right:10px" @change="handleChange">
+            <el-option v-for="(item2,index2) in item.selectOptions" :key="index2" :label="item2" :value="item2" />
+          </el-select>
+          <el-select v-if="item.type=='selectNormal'" v-model="formData[item.param]" :placeholder="item.placeholder" style="margin-right:10px">
+            <el-option v-for="(item2,index2) in item.selectOptions" :key="index2" :label="item2.value" :value="item2.id" />
+          </el-select>
+        </el-form-item>
+        <el-row type="flex" justify="space-around">
+          <el-form-item style="width:12rem">
+            <el-button @click="resetForm('ruleForm')">清除</el-button>
+            <el-button type="primary" @click="onSubmit">搜索</el-button>
+          </el-form-item>
+          <el-form-item style="width:12rem">
+            <el-button type="success" @click="addUser">新增用户</el-button>
+          </el-form-item>
+        </el-row>
+      </el-form>
+    </el-card>
     <slot name="btn" />
   </div>
 </template>
@@ -77,26 +83,17 @@ export default {
     },
     handleChange(currentItem) {
       this.$emit('handleChange', currentItem)
+    },
+    addUser() {
+      this.$emit('addUser')
+    },
+    defaultCity(item) {
+      this.formData.city = item
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.dialog-search{
-    margin: 0 1rem;
-    text-align: left;
-    .el-form-item__content{
-        width: 16rem;
-        .el-input{
-            width: 16rem;
-        }
-        .el-select{
-            .el-input__inner{
-                // height: 3.2rem;
-                width: 16rem;
-            }
-        }
-    }
-}
+
 </style>
